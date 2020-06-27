@@ -12,6 +12,7 @@ import java.io.Serializable;
 @Table(name ="tb_brand")
 public class Brand implements Serializable {
     @ApiModelProperty(value = "品牌id",required = false)
+    @Id
     private String id;
     @ApiModelProperty(value = "品牌名称",required = false)
     private String name;
@@ -22,7 +23,6 @@ public class Brand implements Serializable {
     @ApiModelProperty(value = "排序",required = false)
     private Integer seq;
 
-    @Id
     @Column(name = "id")
     public String getId() {
         return id;

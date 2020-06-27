@@ -17,6 +17,10 @@ eureka:
 feign:
   hystrix:
     enabled: true
+
+logging:
+  level:
+    com.changgou.dao: DEBUG
 #使用通用Mapper,可以不用配置mybatis
 #mybatis:
 #  configuration:

@@ -14,6 +14,18 @@ public class BrandServiceImpl implements BrandService {
     @Autowired
     private BrandMapper brandMapper;
 
+
+    /**
+     * 根据id查询
+     * @param id
+     * @return
+     */
+    @Override
+    public Brand findById(String id) {
+        //根据id查询-》通用maper
+        return brandMapper.selectByPrimaryKey(id);
+    }
+
     /**
      * 查询所有
      * @return

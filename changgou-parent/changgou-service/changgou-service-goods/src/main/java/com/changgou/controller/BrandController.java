@@ -5,11 +5,9 @@ import com.changgou.service.BrandService;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -26,6 +24,16 @@ public class BrandController {
     private BrandService brandService;
 
     /**
+     * 根据主键id查询
+     */
+    @GetMapping(value = "/{id}")
+    public Result<Brand> findById(@PathVariable(value = "id") String id){
+        //调用service实现查询
+        Brand brand = brandService.findById(id);
+        return new Result<Brand>(true,StatusCode.OK,"根据ID查询成功",brand);
+    }
+
+    /**
      * 查询所有品牌
      */
     @GetMapping
@@ -35,8 +43,4 @@ public class BrandController {
         //相应结果封装
         return new Result<List<Brand>> (true, StatusCode.OK,"查询品牌集合成功！",brands);
     }
-
-    /**
-     * 测试git提交流程
-     */
 }
