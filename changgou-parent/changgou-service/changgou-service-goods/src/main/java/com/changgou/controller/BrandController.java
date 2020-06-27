@@ -36,4 +36,7 @@ public class BrandController {
         return new Result<List<Brand>> (true, StatusCode.OK,"查询品牌集合成功！",brands);
     }
 
+    /**
+     * 测试git提交流程
+     */
 }
