@@ -2,11 +2,13 @@ package com.changgou.util;
 
 import com.changgou.file.FastDFSFile;
 import org.csource.common.NameValuePair;
-import org.csource.fastdfs.ClientGlobal;
-import org.csource.fastdfs.StorageClient;
-import org.csource.fastdfs.TrackerClient;
-import org.csource.fastdfs.TrackerServer;
+import org.csource.fastdfs.*;
 import org.springframework.core.io.ClassPathResource;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 /**
  * 实现FastDFS文件管理
@@ -61,6 +63,105 @@ public class FastDFSUtil {
          */
         String[] uploads = storageClient.upload_file(fastDFSFile.getContent(), fastDFSFile.getExt(), meta_list);
         return uploads;
+    }
+
+    /**
+     * 获取文件信息
+     * @param groupName
+     * @param remoteFileName
+     * @return
+     * @throws Exception
+     */
+    public static FileInfo getFile(String groupName, String remoteFileName) throws Exception{
+        //创建一个TrackerClient对象，通过TrackerClient对象访问TrackerServer
+        TrackerClient trackerClient = new TrackerClient();
+        //通过TrackerClient获取TrackerServer的连接对象
+        TrackerServer trackerServer = trackerClient.getConnection();
+        //通过TrackerServer获取storage的信息，创建StorageClient对象存储
+        StorageClient storageClient = new StorageClient(trackerServer,null);
+        //获取文件信息
+        FileInfo fileInfo = storageClient.get_file_info(groupName, remoteFileName);
+        return fileInfo;
+    }
+
+
+    /**
+     * 文件下载
+     * @param groupName
+     * @param remoteFileName
+     * @return
+     * @throws Exception
+     */
+    public static InputStream downloadFile(String groupName, String remoteFileName) throws Exception{
+        //创建一个TrackerClient对象，通过TrackerClient对象访问TrackerServer
+        TrackerClient trackerClient = new TrackerClient();
+        //通过TrackerClient获取TrackerServer的连接对象
+        TrackerServer trackerServer = trackerClient.getConnection();
+        //通过TrackerServer获取storage的信息，创建StorageClient对象存储
+        StorageClient storageClient = new StorageClient(trackerServer,null);
+        //下载文件
+        byte[] buffer = storageClient.download_file(groupName, remoteFileName);
+        return new ByteArrayInputStream(buffer);
+    }
+
+    /**
+     * 删除文件
+     * @param groupName
+     * @param remoteFileName
+     * @throws Exception
+     */
+    public static void deleteFile(String groupName, String remoteFileName) throws Exception{
+        //创建一个TrackerClient对象，通过TrackerClient对象访问TrackerServer
+        TrackerClient trackerClient = new TrackerClient();
+        //通过TrackerClient获取TrackerServer的连接对象
+        TrackerServer trackerServer = trackerClient.getConnection();
+        //通过TrackerServer获取storage的信息，创建StorageClient对象存储
+        StorageClient storageClient = new StorageClient(trackerServer,null);
+        //删除文件
+        storageClient.delete_file(groupName, remoteFileName);
+    }
+
+    /**
+     * 获取storage信息
+     * @throws Exception
+     */
+    public static StorageServer getStorages() throws Exception{
+        //创建一个TrackerClient对象，通过TrackerClient对象访问TrackerServer
+        TrackerClient trackerClient = new TrackerClient();
+        //通过TrackerClient获取TrackerServer的连接对象
+        TrackerServer trackerServer = trackerClient.getConnection();
+        //获取storage信息
+        StorageServer storeStorage = trackerClient.getStoreStorage(trackerServer);
+        return storeStorage;
+    }
+
+    public static void main(String[] args) throws Exception{
+//        FileInfo fileInfo = getFile("group1","M00/00/00/wKgAa178KRCAOMI5AAZ7oCuAWCI484.jpg");
+//        System.out.println(fileInfo.getSourceIpAddr());
+//        System.out.println(String.valueOf(fileInfo.getFileSize()));
+
+
+        //文件下载
+//        InputStream is = downloadFile("group1", "M00/00/00/wKgAa178KRCAOMI5AAZ7oCuAWCI484.jpg");
+//
+//        FileOutputStream os = new FileOutputStream("D:/1.jpg");
+//
+//        byte[] buffer = new byte[1024];
+//        while (is.read(buffer) !=-1){
+//            os.write(buffer);
+//        }
+//        os.flush();
+//        os.close();
+//        is.close();
+
+        //文件删除
+//        deleteFile("group1", "M00/00/00/wKgAa178KRCAOMI5AAZ7oCuAWCI484.jpg");
+
+        //获取storage信息
+        StorageServer storageServer = getStorages();
+        System.out.println(storageServer.getStorePathIndex());
+        System.out.println(storageServer.getInetSocketAddress().toString());
+
     }
 
 }
